@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap"><title>Operations Dashboard</title><style>:root{--bg:#F3F5F7;--panel:#FFF;--ink:#16202A;--muted:#566370;--line:#D9DFE5;--accent:#2849C8;--ac:#FFF;--good:#1C7C4A;--bad:#C0362C;--warn:#A86400;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E141A;--panel:#16202A;--ink:#E7EDF2;--muted:#9AA8B5;--line:#273543;--accent:#8CA4FF;--ac:#0E141A;--good:#5FD394;--bad:#FF8A80;--warn:#F2B35E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E141A;--panel:#16202A;--ink:#E7EDF2;--muted:#9AA8B5;--line:#273543;--accent:#8CA4FF;--ac:#0E141A;--good:#5FD394;--bad:#FF8A80;--warn:#F2B35E;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 3rem}
+h1{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:800;letter-spacing:-.03em;margin:0 0 .3rem;line-height:1.1}
+h2{font-size:1.05rem;margin:0 0 .6rem}
+.sub{color:var(--muted);margin:0 0 1.5rem;max-width:40rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1.1rem}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:var(--accent);color:var(--ac);border:0;border-radius:6px;padding:.55rem 1rem;font-weight:600;cursor:pointer}
+button.alt{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+input,select{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:.5rem .6rem;width:100%}
+ul{list-style:none;margin:0;padding:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-bottom:1rem}
+.kpi b{display:block;font-size:2rem;letter-spacing:-.02em}.kpi span{color:var(--muted);font-size:.92rem}
+.grid2{display:grid;gap:1rem;margin-bottom:1rem}@media(min-width:760px){.grid2{grid-template-columns:1fr 1fr}}
+.row{display:flex;justify-content:space-between;align-items:center;gap:.6rem;padding:.55rem 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}.ok{color:var(--good)}.down,.hot{color:var(--bad)}
+svg{width:100%;height:90px;display:block;color:var(--accent)}
+#log li{font-size:.88rem;padding:.2rem 0;color:var(--muted)}
+</style></head><body><div class="wrap">
+<h1>Operations dashboard</h1>
+<p class="sub">A live view of a simulated web service. Take a service down and watch the error rate and latency react. All data is generated in your browser.</p>
+<div class="kpis" id="kpis"></div>
+<div class="grid2"><div class="card"><h2>Requests per minute</h2><div id="c1"></div></div><div class="card"><h2>p95 latency (ms)</h2><div id="c2"></div></div></div>
+<div class="grid2"><div class="card"><h2>Services</h2><ul id="svc"></ul></div><div class="card"><h2>Event log</h2><ul id="log"></ul></div></div>
+<button id="pause" class="alt">Pause updates</button>
+</div><script>
+const N=40,S=['API gateway','Auth service','Orders database','Payments','Email queue'].map(n=>({n,down:false}));
+let req=Array(N).fill(900),lat=Array(N).fill(110),err=0.4,paused=false;const logs=[];
+function log(m){logs.unshift(new Date().toLocaleTimeString()+'  '+m);logs.length=Math.min(logs.length,7)}
+function line(d,max){const p=d.map((v,i)=>(i*300/(N-1)).toFixed(1)+','+(88-Math.min(v,max)/max*84).toFixed(1)).join(' ');return '<svg viewBox="0 0 300 90" preserveAspectRatio="none" role="img" aria-label="Chart of the last '+N+' seconds"><polyline points="'+p+'" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>'}
+function render(){
+ const up=S.filter(s=>!s.down).length;
+ document.getElementById('kpis').innerHTML=
+  [['Requests / min',req[N-1],''],['Error rate',err+'%',err>2?'hot':''],['p95 latency',lat[N-1]+' ms',lat[N-1]>300?'hot':''],['Services up',up+' of '+S.length,up<S.length?'hot':'']]
+  .map(k=>'<div class="card kpi"><span>'+k[0]+'</span><b class="'+k[2]+'">'+k[1]+'</b></div>').join('');
+ c1.innerHTML=line(req,1100);c2.innerHTML=line(lat,900);
+ svc.innerHTML=S.map((s,i)=>'<li class="row"><span>'+s.n+'</span><span class="'+(s.down?'down':'ok')+'">'+(s.down?'Down':'Healthy')+'</span><button class="alt" data-i="'+i+'">'+(s.down?'Restore':'Simulate outage')+'</button></li>').join('');
+ document.getElementById('log').innerHTML=logs.map(l=>'<li class="mono">'+l+'</li>').join('')||'<li>No events yet.</li>';
+}
+function tick(){if(paused)return;const d=S.filter(s=>s.down).length;
+ req.push(Math.round(900+Math.random()*120-d*90));req.shift();
+ lat.push(Math.round(105+Math.random()*25+d*210));lat.shift();
+ err=+(0.3+Math.random()*0.2+d*7.5).toFixed(1);render()}
+document.getElementById('svc').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const s=S[b.dataset.i];s.down=!s.down;log(s.n+(s.down?' went down':' restored'));render()});
+document.getElementById('pause').onclick=e=>{paused=!paused;e.target.textContent=paused?'Resume updates':'Pause updates'};
+log('Dashboard started');render();setInterval(tick,1000);
+</script></body></html>

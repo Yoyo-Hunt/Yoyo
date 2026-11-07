@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap"><title>Code Quest</title><style>:root{--bg:#F3F5F7;--panel:#FFF;--ink:#16202A;--muted:#566370;--line:#D9DFE5;--accent:#2849C8;--ac:#FFF;--good:#1C7C4A;--bad:#C0362C;--warn:#A86400;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E141A;--panel:#16202A;--ink:#E7EDF2;--muted:#9AA8B5;--line:#273543;--accent:#8CA4FF;--ac:#0E141A;--good:#5FD394;--bad:#FF8A80;--warn:#F2B35E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E141A;--panel:#16202A;--ink:#E7EDF2;--muted:#9AA8B5;--line:#273543;--accent:#8CA4FF;--ac:#0E141A;--good:#5FD394;--bad:#FF8A80;--warn:#F2B35E;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 3rem}
+h1{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:800;letter-spacing:-.03em;margin:0 0 .3rem;line-height:1.1}
+h2{font-size:1.05rem;margin:0 0 .6rem}
+.sub{color:var(--muted);margin:0 0 1.5rem;max-width:40rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1.1rem}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:var(--accent);color:var(--ac);border:0;border-radius:6px;padding:.55rem 1rem;font-weight:600;cursor:pointer}
+button.alt{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+input,select{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:.5rem .6rem;width:100%}
+ul{list-style:none;margin:0;padding:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+
+.layout{display:grid;gap:1rem}@media(min-width:800px){.layout{grid-template-columns:220px 1fr}}
+#nav button{display:flex;justify-content:space-between;width:100%;text-align:left;background:transparent;color:var(--ink);border:1px solid var(--line);margin-bottom:.4rem}
+#nav button[aria-current="true"]{border-color:var(--accent);background:var(--panel);box-shadow:inset 3px 0 0 var(--accent)}
+.done{color:var(--good)}
+textarea{width:100%;min-height:200px;background:#0F1720;color:#DCE6F0;border:1px solid var(--line);border-radius:8px;padding:.9rem;font:400 .92rem/1.6 "IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;resize:vertical;tab-size:2}
+.acts{display:flex;gap:.6rem;flex-wrap:wrap;margin:.8rem 0}
+#out li{padding:.3rem 0;font-size:.93rem}.pass{color:var(--good)}.fail{color:var(--bad)}
+#prog{color:var(--muted);margin:0 0 .8rem}
+</style></head><body><div class="wrap">
+<h1>Code Quest</h1>
+<p class="sub">Four short JavaScript challenges. Write the function, press Run, and the tests tell you if it works.</p>
+<div class="layout">
+<div><p id="prog"></p><div id="nav"></div></div>
+<div class="card"><h2 id="t"></h2><p id="d"></p>
+<textarea id="ed" spellcheck="false" aria-label="Code editor"></textarea>
+<div class="acts"><button id="run">Run tests</button><button id="hint" class="alt">Show hint</button><button id="rst" class="alt">Reset code</button></div>
+<p id="h" hidden style="color:var(--muted)"></p><ul id="out" class="mono"></ul></div>
+</div></div><script>
+const fb=n=>Array.from({length:n},(_,i)=>(i+1)%15==0?'FizzBuzz':(i+1)%3==0?'Fizz':(i+1)%5==0?'Buzz':String(i+1));
+const CH=[
+{t:'Sum an array',fn:'sum',d:'Write sum(numbers) that returns the total of all the numbers in an array. An empty array gives 0.',s:'function sum(numbers) {\n  // your code here\n}',h:'Keep a running total in a variable and add each number in a loop, or try numbers.reduce.',T:[{a:[[1,2,3]],e:6},{a:[[]],e:0},{a:[[-1,1,5]],e:5}]},
+{t:'Reverse a string',fn:'reverse',d:'Write reverse(text) that returns the text backwards.',s:'function reverse(text) {\n  // your code here\n}',h:'Strings can be split into an array, reversed, and joined back together.',T:[{a:['abc'],e:'cba'},{a:[''],e:''},{a:['Yousif'],e:'fisuoY'}]},
+{t:'Palindrome check',fn:'isPalindrome',d:'Write isPalindrome(text) that returns true if the text reads the same forwards and backwards, ignoring upper and lower case.',s:'function isPalindrome(text) {\n  // your code here\n}',h:'Lowercase the text first, then compare it with its reverse.',T:[{a:['Level'],e:true},{a:['hello'],e:false},{a:['a'],e:true}]},
+{t:'FizzBuzz',fn:'fizzbuzz',d:'Write fizzbuzz(n) that returns an array of the strings for 1 to n. Use "Fizz" for multiples of 3, "Buzz" for multiples of 5, and "FizzBuzz" for both.',s:'function fizzbuzz(n) {\n  // your code here\n}',h:'Check the multiple of 15 first, then 3, then 5. Otherwise use String(i).',T:[{a:[5],e:fb(5)},{a:[15],e:fb(15)},{a:[1],e:['1']}]}];
+const $=id=>document.getElementById(id);let cur=0,solved=new Set(),code=CH.map(c=>c.s);
+try{solved=new Set(JSON.parse(localStorage.getItem('cq')||'[]'))}catch(e){}
+function save(){try{localStorage.setItem('cq',JSON.stringify([...solved]))}catch(e){}}
+function show(){const c=CH[cur];$('t').textContent=c.t;$('d').textContent=c.d;$('ed').value=code[cur];$('out').innerHTML='';$('h').hidden=true;$('h').textContent=c.h;$('hint').textContent='Show hint';nav()}
+function nav(){$('prog').textContent=solved.size+' of '+CH.length+' solved';
+ $('nav').innerHTML=CH.map((c,i)=>'<button data-i="'+i+'" aria-current="'+(i==cur)+'"><span>'+c.t+'</span><span class="done">'+(solved.has(i)?'✓':'')+'</span></button>').join('')}
+$('nav').onclick=e=>{const b=e.target.closest('button');if(b){code[cur]=$('ed').value;cur=+b.dataset.i;show()}};
+$('ed').addEventListener('input',()=>code[cur]=$('ed').value);
+$('ed').addEventListener('keydown',e=>{if(e.key=='Tab'){e.preventDefault();const t=e.target,s=t.selectionStart;t.setRangeText('  ',s,t.selectionEnd,'end')}});
+$('hint').onclick=()=>{$('h').hidden=!$('h').hidden;$('hint').textContent=$('h').hidden?'Show hint':'Hide hint'};
+$('rst').onclick=()=>{code[cur]=CH[cur].s;show()};
+$('run').onclick=()=>{const c=CH[cur],o=$('out');let f;
+ try{f=new Function('"use strict";'+$('ed').value+'\nreturn '+c.fn+';')()}catch(e){o.innerHTML='<li class="fail">✗ '+esc(e.name+': '+e.message)+'</li>';return}
+ if(typeof f!='function'){o.innerHTML='<li class="fail">✗ Define a function named '+c.fn+'.</li>';return}
+ let all=true;o.innerHTML=c.T.map(t=>{let r;try{r=f(...t.a)}catch(e){r='Error: '+e.message}
+  const ok=JSON.stringify(r)===JSON.stringify(t.e);all=all&&ok;const call=c.fn+'('+t.a.map(x=>JSON.stringify(x)).join(', ')+')';
+  return ok?'<li class="pass">✓ '+esc(call)+'</li>':'<li class="fail">✗ '+esc(call)+' gave '+esc(JSON.stringify(r))+'</li>'}).join('');
+ if(all){solved.add(cur);save();nav();o.innerHTML+='<li class="pass">All tests passed.</li>'}};
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+show();
+</script></body></html>

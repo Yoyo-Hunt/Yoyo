@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap"><title>Mortgage Calculator</title><style>:root{--bg:#F3F5F7;--panel:#FFF;--ink:#16202A;--muted:#566370;--line:#D9DFE5;--accent:#2849C8;--ac:#FFF;--good:#1C7C4A;--bad:#C0362C;--warn:#A86400;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E141A;--panel:#16202A;--ink:#E7EDF2;--muted:#9AA8B5;--line:#273543;--accent:#8CA4FF;--ac:#0E141A;--good:#5FD394;--bad:#FF8A80;--warn:#F2B35E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E141A;--panel:#16202A;--ink:#E7EDF2;--muted:#9AA8B5;--line:#273543;--accent:#8CA4FF;--ac:#0E141A;--good:#5FD394;--bad:#FF8A80;--warn:#F2B35E;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:1.5rem 1.25rem 3rem}
+h1{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:800;letter-spacing:-.03em;margin:0 0 .3rem;line-height:1.1}
+h2{font-size:1.05rem;margin:0 0 .6rem}
+.sub{color:var(--muted);margin:0 0 1.5rem;max-width:40rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1.1rem}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:var(--accent);color:var(--ac);border:0;border-radius:6px;padding:.55rem 1rem;font-weight:600;cursor:pointer}
+button.alt{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+input,select{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:.5rem .6rem;width:100%}
+ul{list-style:none;margin:0;padding:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+
+.layout{display:grid;gap:1rem}@media(min-width:800px){.layout{grid-template-columns:320px 1fr}}
+label{display:block;font-weight:600;margin:.8rem 0 .25rem;font-size:.95rem}label:first-child{margin-top:0}
+.big{font-size:clamp(2.2rem,7vw,3.2rem);font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin:1rem 0}
+.stats span{color:var(--muted);font-size:.9rem;display:block}.stats b{font-size:1.2rem}
+svg{width:100%;height:auto;display:block}
+.tw{max-height:260px;overflow:auto;margin-top:1rem}table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:right;padding:.35rem .5rem;border-top:1px solid var(--line)}th:first-child,td:first-child{text-align:left}
+th{position:sticky;top:0;background:var(--panel)}small{color:var(--muted)}
+</style></head><body><div class="wrap">
+<h1>Mortgage calculator</h1>
+<p class="sub">Estimate your monthly payment and see how your balance falls over time.</p>
+<div class="layout">
+<div class="card">
+<label for="price">Home price ($)</label><input id="price" type="number" value="650000" min="0" step="5000">
+<label for="down">Down payment (%)</label><input id="down" type="number" value="20" min="0" max="100" step="1">
+<label for="rate">Interest rate (% per year)</label><input id="rate" type="number" value="4.8" min="0" step="0.05">
+<label for="yrs">Amortization (years)</label><input id="yrs" type="number" value="25" min="1" max="40" step="1">
+<label for="cmp">Interest compounding</label><select id="cmp"><option value="12">Monthly (US style)</option><option value="2">Semi-annual (Canadian style)</option></select>
+</div>
+<div class="card" aria-live="polite">
+<span style="color:var(--muted)">Monthly payment</span><div class="big" id="pay"></div>
+<div class="stats"><div><span>Loan amount</span><b id="loan"></b></div><div><span>Total interest</span><b id="int"></b></div><div><span>Total repaid</span><b id="tot"></b></div></div>
+<h2>Remaining balance</h2><div id="chart"></div>
+<div class="tw"><table><thead><tr><th>Year</th><th>Interest</th><th>Principal</th><th>Balance</th></tr></thead><tbody id="rows"></tbody></table></div>
+<p><small>Estimates only, not financial advice. Real offers add insurance, taxes, and fees.</small></p>
+</div></div></div><script>
+const $=id=>document.getElementById(id),m=n=>'$'+Math.round(n).toLocaleString('en-US');
+function calc(){
+ const price=+$('price').value||0,loan=price*(1-(+$('down').value||0)/100),ann=(+$('rate').value||0)/100,y=Math.max(1,+$('yrs').value||1),n=y*12,k=+$('cmp').value;
+ const r=ann==0?0:Math.pow(1+ann/k,k/12)-1;
+ const pay=r==0?loan/n:loan*r/(1-Math.pow(1+r,-n));
+ let bal=loan,rows='',pts=[[0,loan]],yi=0,yp=0;
+ for(let i=1;i<=n;i++){const it=bal*r,pr=pay-it;bal=Math.max(0,bal-pr);yi+=it;yp+=pr;
+  if(i%12==0||i==n){rows+='<tr><td>'+Math.ceil(i/12)+'</td><td>'+m(yi)+'</td><td>'+m(yp)+'</td><td>'+m(bal)+'</td></tr>';pts.push([i/12,bal]);yi=yp=0}}
+ $('pay').textContent=m(pay);$('loan').textContent=m(loan);$('int').textContent=m(pay*n-loan);$('tot').textContent=m(pay*n);$('rows').innerHTML=rows;
+ const W=600,H=200,mx=loan||1,p=pts.map(q=>(q[0]/y*W).toFixed(1)+','+(H-q[1]/mx*H).toFixed(1)).join(' ');
+ $('chart').innerHTML='<svg viewBox="0 0 600 210" role="img" aria-label="Balance falling from '+m(loan)+' to zero over '+y+' years"><polygon points="0,'+H+' '+p+' '+W+','+H+'" fill="var(--accent)" opacity=".18"/><polyline points="'+p+'" fill="none" stroke="var(--accent)" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>';
+}
+document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',calc));calc();
+</script></body></html>
