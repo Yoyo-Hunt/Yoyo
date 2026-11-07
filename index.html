@@ -54,13 +54,23 @@ h2{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.4rem}
 .contact li span{display:inline-block;min-width:6.5rem;color:var(--muted)}
 footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line)}
 .demos{display:grid;gap:1.1rem}@media(min-width:760px){.demos{grid-template-columns:1fr 1fr}}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.1rem 0;border-bottom:1px solid var(--line)}
+.nav div{display:flex;gap:1.3rem;flex-wrap:wrap}.nav a{color:var(--ink);text-decoration:none;font-weight:600}.nav a:hover{color:var(--accent)}.brand{font-weight:800;letter-spacing:-.02em}
+.pill{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:.2rem .85rem;font-size:.9rem;margin:0 0 1.1rem}
+.dot{width:.55rem;height:.55rem;border-radius:50%;background:#1C9E5E}
+.proj{transition:border-color .15s}.proj:hover{border-color:var(--accent)}
+.thumb{background:var(--tag);border-radius:6px;margin-bottom:1rem;color:var(--accent);overflow:hidden}.thumb svg{display:block;width:100%;height:90px}
+.demos .links a{display:inline-block;background:var(--accent);color:var(--accent-ink);padding:.45rem .95rem;border-radius:6px;font-weight:600;text-decoration:none}
+.hero{padding-top:3rem}
 </style>
 </head>
 <body>
-<main class="wrap">
+<main class="wrap" id="top">
+<nav class="nav"><a class="brand" href="#top">Yousif</a><div><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#demos">Demos</a><a href="#contact">Contact</a></div></nav>
 
 <div class="hero">
   <div>
+    <p class="pill"><span class="dot"></span>Open to work</p>
     <h1>Yousif</h1>
     <p class="role">Developer</p>
     <p class="lede">I studied computer programming and trained in Python, AWS, and backend development. I’m now building and deploying projects that show what I can do with it.</p>
@@ -125,10 +135,10 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
   <h2>Front-end demos</h2>
   <p class="sub">Small apps built in plain HTML and JavaScript. Open any of them and try it.</p>
   <div class="demos">
-<article class="proj"><header><h3>Operations Dashboard</h3><span class="status">Live</span></header><p>A live view of a simulated web service. Take a service down and watch the error rate and latency react.</p><ul class="tags"><li>JavaScript</li><li>SVG charts</li><li>HTML</li><li>CSS</li></ul><div class="links"><a href="apps/Operations Dashboard.html">Open the app</a></div></article>
-<article class="proj"><header><h3>Snake</h3><span class="status">Live</span></header><p>The classic game, playable with the keyboard, on-screen buttons, or swipes, and it saves your best score.</p><ul class="tags"><li>JavaScript</li><li>Canvas</li><li>Touch input</li></ul><div class="links"><a href="apps/snake.html">Open the app</a></div></article>
-<article class="proj"><header><h3>Mortgage Calculator</h3><span class="status">Live</span></header><p>Estimates the monthly payment and total interest, and charts how the balance falls over time.</p><ul class="tags"><li>JavaScript</li><li>Finance maths</li><li>SVG charts</li></ul><div class="links"><a href="apps/Mortgage Calculator.html">Open the app</a></div></article>
-<article class="proj"><header><h3>Code Quest</h3><span class="status">Live</span></header><p>A coding site with an in-browser editor and four JavaScript challenges that check your answers with tests.</p><ul class="tags"><li>JavaScript</li><li>Code editor</li><li>Unit tests</li></ul><div class="links"><a href="apps/Code Quest.html">Open the app</a></div></article>
+<article class="proj"><div class="thumb"><svg viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,60 30,50 60,55 90,35 120,42 150,25 180,38 210,20 240,30 270,15 300,22" fill="none" stroke="currentColor" stroke-width="3"/><g fill="currentColor" opacity=".35"><rect x="10" y="70" width="30" height="14"/><rect x="50" y="64" width="30" height="20"/><rect x="90" y="58" width="30" height="26"/><rect x="130" y="66" width="30" height="18"/></g></svg></div><header><h3>Operations Dashboard</h3><span class="status">Live</span></header><p>A live view of a simulated web service. Take a service down and watch the error rate and latency react.</p><ul class="tags"><li>JavaScript</li><li>SVG charts</li><li>HTML</li><li>CSS</li></ul><div class="links"><a href="apps/Operations%20Dashboard.html">Open the app</a></div></article>
+<article class="proj"><div class="thumb"><svg viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true"><g fill="currentColor"><rect x="60" y="40" width="20" height="20" opacity=".5"/><rect x="80" y="40" width="20" height="20" opacity=".6"/><rect x="100" y="40" width="20" height="20" opacity=".7"/><rect x="120" y="40" width="20" height="20" opacity=".8"/><rect x="140" y="40" width="20" height="20"/><rect x="140" y="20" width="20" height="20"/></g><rect x="220" y="26" width="16" height="16" fill="var(--bad)"/></svg></div><header><h3>Snake</h3><span class="status">Live</span></header><p>The classic game, playable with the keyboard, on-screen buttons, or swipes, and it saves your best score.</p><ul class="tags"><li>JavaScript</li><li>Canvas</li><li>Touch input</li></ul><div class="links"><a href="apps/Snake.html">Open the app</a></div></article>
+<article class="proj"><div class="thumb"><svg viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,90 0,12 60,16 120,26 180,42 240,62 300,86 300,90" fill="currentColor" opacity=".3"/><polyline points="0,12 60,16 120,26 180,42 240,62 300,86" fill="none" stroke="currentColor" stroke-width="3"/></svg></div><header><h3>Mortgage Calculator</h3><span class="status">Live</span></header><p>Estimates the monthly payment and total interest, and charts how the balance falls over time.</p><ul class="tags"><li>JavaScript</li><li>Finance maths</li><li>SVG charts</li></ul><div class="links"><a href="apps/Mortgage%20Calculator.html">Open the app</a></div></article>
+<article class="proj"><div class="thumb"><svg viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true"><g fill="currentColor"><rect x="24" y="16" width="70" height="8" rx="4"/><rect x="40" y="32" width="120" height="8" rx="4" opacity=".6"/><rect x="40" y="48" width="90" height="8" rx="4" opacity=".6"/><rect x="24" y="64" width="30" height="8" rx="4"/><rect x="200" y="30" width="60" height="28" rx="6" opacity=".25"/></g></svg></div><header><h3>Code Quest</h3><span class="status">Live</span></header><p>A coding site with an in-browser editor and four JavaScript challenges that check your answers with tests.</p><ul class="tags"><li>JavaScript</li><li>Code editor</li><li>Unit tests</li></ul><div class="links"><a href="apps/Code%20Quest.html">Open the app</a></div></article>
   </div>
 </section>
 
