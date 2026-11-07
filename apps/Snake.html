@@ -23,7 +23,9 @@ canvas{width:100%;max-width:360px;aspect-ratio:1;border:2px solid var(--line);bo
 #msg{min-height:1.6rem;color:var(--muted);margin:.7rem 0}
 .pad{display:grid;grid-template-columns:repeat(3,64px);gap:.4rem;justify-content:center;margin:.8rem 0}
 .pad button{padding:.8rem 0;font-size:1.2rem}.pad .u{grid-column:2}.pad .l{grid-column:1;grid-row:2}.pad .d{grid-column:2;grid-row:2}.pad .r{grid-column:3;grid-row:2}
+.back{margin:0 0 1.2rem}.back a{display:inline-block;color:var(--accent);font-weight:600;text-decoration:none;border:1.5px solid var(--line);border-radius:6px;padding:.3rem .8rem}.back a:hover{border-color:var(--accent)}
 </style></head><body><div class="wrap">
+<p class="back"><a href="../index.html#demos">← Back to portfolio</a></p>
 <h1>Snake</h1>
 <p class="sub">Eat the food, grow longer, and don’t hit the walls or yourself.</p>
 <div class="bar"><span>Score: <span id="sc">0</span></span><span>Best: <span id="bs">0</span></span></div>
