@@ -53,6 +53,7 @@ h2{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.4rem}
 .contact ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
 .contact li span{display:inline-block;min-width:6.5rem;color:var(--muted)}
 footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line)}
+.demos{display:grid;gap:1.1rem}@media(min-width:760px){.demos{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -71,7 +72,7 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
 <pre aria-label="Summary of Yousif as an API response"><span class="bar">GET /developers/yousif  200 OK</span>{
   <span class="k">"name"</span>: <span class="s">"Yousif"</span>,
   <span class="k">"education"</span>: <span class="s">"Computer Programming Diploma"</span>,
-  <span class="k">"languages"</span>: [<span class="s">"Python"</span>],
+  <span class="k">"languages"</span>: [<span class="s">"Python"</span>, <span class="s">"JavaScript"</span>],
   <span class="k">"cloud"</span>: [<span class="s">"AWS"</span>],
   <span class="k">"focus"</span>: <span class="s">"Backend"</span>,
   <span class="k">"open_to_work"</span>: true
@@ -82,7 +83,7 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
   <h2>Skills</h2>
   <p class="sub">What I trained in and am using in my current projects.</p>
   <div class="skills">
-    <div><h3>Languages</h3><ul class="tags"><li>Python</li><li>SQL</li></ul></div>
+    <div><h3>Languages</h3><ul class="tags"><li>Python</li><li>JavaScript</li><li>SQL</li><li>HTML &amp; CSS</li></ul></div>
     <div><h3>Backend</h3><ul class="tags"><li>REST APIs</li><li>Databases</li><li>Authentication</li></ul></div>
     <div><h3>Cloud</h3><ul class="tags"><li>AWS Lambda</li><li>API Gateway</li><li>S3</li><li>DynamoDB</li></ul></div>
   </div>
@@ -90,7 +91,7 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
 
 <section id="projects">
   <h2>Projects</h2>
-  <p class="sub">Each project is built, deployed, and published with its code on GitHub.</p>
+  <p class="sub">Backend projects I’m building and deploying, with the code on GitHub.</p>
   <div class="projects">
 
     <article class="proj">
@@ -117,6 +118,17 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
       <div class="links"><a href="#contact">GitHub repo (add link)</a></div>
     </article>
 
+  </div>
+</section>
+
+<section id="demos">
+  <h2>Front-end demos</h2>
+  <p class="sub">Small apps built in plain HTML and JavaScript. Open any of them and try it.</p>
+  <div class="demos">
+<article class="proj"><header><h3>Operations Dashboard</h3><span class="status">Live</span></header><p>A live view of a simulated web service. Take a service down and watch the error rate and latency react.</p><ul class="tags"><li>JavaScript</li><li>SVG charts</li><li>HTML</li><li>CSS</li></ul><div class="links"><a href="apps/dashboard.html">Open the app</a></div></article>
+<article class="proj"><header><h3>Snake</h3><span class="status">Live</span></header><p>The classic game, playable with the keyboard, on-screen buttons, or swipes, and it saves your best score.</p><ul class="tags"><li>JavaScript</li><li>Canvas</li><li>Touch input</li></ul><div class="links"><a href="apps/snake.html">Open the app</a></div></article>
+<article class="proj"><header><h3>Mortgage Calculator</h3><span class="status">Live</span></header><p>Estimates the monthly payment and total interest, and charts how the balance falls over time.</p><ul class="tags"><li>JavaScript</li><li>Finance maths</li><li>SVG charts</li></ul><div class="links"><a href="apps/mortgage.html">Open the app</a></div></article>
+<article class="proj"><header><h3>Code Quest</h3><span class="status">Live</span></header><p>A coding site with an in-browser editor and four JavaScript challenges that check your answers with tests.</p><ul class="tags"><li>JavaScript</li><li>Code editor</li><li>Unit tests</li></ul><div class="links"><a href="apps/codequest.html">Open the app</a></div></article>
   </div>
 </section>
 
