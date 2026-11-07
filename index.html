@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yousif – Developer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F3F5F7;--panel:#FFFFFF;--ink:#16202A;--muted:#566370;--line:#D9DFE5;--accent:#2849C8;--accent-ink:#FFFFFF;--tag:#E6ECFA;
+  --code-bg:#16202A;--code-ink:#DCE6F0;--code-key:#8FA9FF;--code-str:#9FD9B5;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0E141A;--panel:#16202A;--ink:#E7EDF2;--muted:#9AA8B5;--line:#273543;--accent:#8CA4FF;--accent-ink:#0E141A;--tag:#223056;--code-bg:#0A0F14;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#0E141A;--panel:#16202A;--ink:#E7EDF2;--muted:#9AA8B5;--line:#273543;--accent:#8CA4FF;--accent-ink:#0E141A;--tag:#223056;--code-bg:#0A0F14;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.05rem/1.6 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:0 1.25rem}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:2px}
+h1,h2,h3{line-height:1.1;margin:0}
+.hero{display:grid;gap:2.5rem;padding:4.5rem 0 3.5rem;align-items:center}
+@media(min-width:820px){.hero{grid-template-columns:1.1fr 1fr}}
+h1{font-size:clamp(3.4rem,11vw,6.5rem);font-weight:800;letter-spacing:-.04em}
+.role{font-size:1.35rem;font-weight:600;margin:.6rem 0 1.1rem}
+.lede{color:var(--muted);max-width:34rem;margin:0 0 1.6rem}
+.btns{display:flex;flex-wrap:wrap;gap:.75rem}
+.btn{display:inline-block;padding:.7rem 1.2rem;border-radius:6px;font-weight:600;text-decoration:none;border:1.5px solid var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:1.25rem 1.3rem;font:400 .9rem/1.65 "IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;overflow-x:auto}
+pre .bar{display:block;color:#7F93A6;margin-bottom:.6rem}
+.k{color:var(--code-key)}.s{color:var(--code-str)}
+section{padding:3rem 0;border-top:1px solid var(--line)}
+h2{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.4rem}
+.sub{color:var(--muted);margin:0 0 1.8rem;max-width:40rem}
+.skills{display:grid;gap:1.5rem}
+@media(min-width:700px){.skills{grid-template-columns:repeat(3,1fr)}}
+.skills h3{font-size:1.05rem;margin-bottom:.5rem}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin:0;padding:0;list-style:none}
+.tags li{background:var(--tag);color:var(--ink);border-radius:4px;padding:.15rem .6rem;font-size:.9rem}
+.projects{display:grid;gap:1.1rem}
+.proj{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1.4rem}
+.proj header{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;flex-wrap:wrap;margin-bottom:.6rem}
+.proj h3{font-size:1.35rem}
+.status{font-size:.85rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:.1rem .7rem}
+.proj p{margin:.3rem 0 .9rem;max-width:44rem}
+.proj .shows{color:var(--muted);font-size:.97rem}
+.proj .links{margin-top:1rem;font-size:.95rem;display:flex;gap:1.2rem;flex-wrap:wrap}
+.contact ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.contact li span{display:inline-block;min-width:6.5rem;color:var(--muted)}
+footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<div class="hero">
+  <div>
+    <h1>Yousif</h1>
+    <p class="role">Developer</p>
+    <p class="lede">I studied computer programming and trained in Python, AWS, and backend development. I’m now building and deploying projects that show what I can do with it.</p>
+    <div class="btns">
+      <a class="btn primary" href="#projects">See my projects</a>
+      <a class="btn" href="#contact">Get in touch</a>
+    </div>
+  </div>
+<pre aria-label="Summary of Yousif as an API response"><span class="bar">GET /developers/yousif  200 OK</span>{
+  <span class="k">"name"</span>: <span class="s">"Yousif"</span>,
+  <span class="k">"education"</span>: <span class="s">"Computer Programming Diploma"</span>,
+  <span class="k">"languages"</span>: [<span class="s">"Python"</span>],
+  <span class="k">"cloud"</span>: [<span class="s">"AWS"</span>],
+  <span class="k">"focus"</span>: <span class="s">"Backend"</span>,
+  <span class="k">"open_to_work"</span>: true
+}</pre>
+</div>
+
+<section id="skills">
+  <h2>Skills</h2>
+  <p class="sub">What I trained in and am using in my current projects.</p>
+  <div class="skills">
+    <div><h3>Languages</h3><ul class="tags"><li>Python</li><li>SQL</li></ul></div>
+    <div><h3>Backend</h3><ul class="tags"><li>REST APIs</li><li>Databases</li><li>Authentication</li></ul></div>
+    <div><h3>Cloud</h3><ul class="tags"><li>AWS Lambda</li><li>API Gateway</li><li>S3</li><li>DynamoDB</li></ul></div>
+  </div>
+</section>
+
+<section id="projects">
+  <h2>Projects</h2>
+  <p class="sub">Each project is built, deployed, and published with its code on GitHub.</p>
+  <div class="projects">
+
+    <article class="proj">
+      <header><h3>Task Manager API</h3><span class="status">In progress</span></header>
+      <p>A REST API where users sign up, log in, and manage their own tasks. Documented endpoints, a relational database, and token-based authentication.</p>
+      <ul class="tags"><li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>JWT</li></ul>
+      <p class="shows">Shows: API design, authentication, database modelling.</p>
+      <div class="links"><a href="#contact">GitHub repo (add link)</a><a href="#contact">Live demo (add link)</a></div>
+    </article>
+
+    <article class="proj">
+      <header><h3>Serverless File Uploader</h3><span class="status">Planned</span></header>
+      <p>Upload a file through an API and have it stored in S3, with its details saved to DynamoDB. No servers to manage, and it costs almost nothing to run.</p>
+      <ul class="tags"><li>AWS Lambda</li><li>API Gateway</li><li>S3</li><li>DynamoDB</li></ul>
+      <p class="shows">Shows: cloud architecture, serverless design, IAM permissions.</p>
+      <div class="links"><a href="#contact">GitHub repo (add link)</a><a href="#contact">Live demo (add link)</a></div>
+    </article>
+
+    <article class="proj">
+      <header><h3>Daily Data Report</h3><span class="status">Planned</span></header>
+      <p>A scheduled script that pulls data from a public API, cleans it, and sends a short summary report every day.</p>
+      <ul class="tags"><li>Python</li><li>Public API</li><li>EventBridge</li><li>Lambda</li></ul>
+      <p class="shows">Shows: automation, data handling, scheduled jobs.</p>
+      <div class="links"><a href="#contact">GitHub repo (add link)</a></div>
+    </article>
+
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <h2>Contact</h2>
+  <p class="sub">I’m looking for a junior backend or cloud role. Reach out on any of these.</p>
+  <ul>
+    <li><span>LinkedIn</span><a href="#contact">Add your LinkedIn link</a></li>
+    <li><span>GitHub</span><a href="#contact">Add your GitHub link</a></li>
+    <li><span>Email</span><a href="#contact">Add your email address</a></li>
+  </ul>
+</section>
+
+<footer>© 2026 Yousif</footer>
+</main>
+</body>
+</html>
