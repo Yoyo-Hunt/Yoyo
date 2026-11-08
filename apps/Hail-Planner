@@ -1,0 +1,158 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap"><title>Hall Planner</title><style>:root{--bg:#F5F6FC;--panel:#FFF;--ink:#12142B;--muted:#5A5F7D;--line:#E1E4F2;--accent:#4F3FE8;--ac:#FFF;--hl:#FFB020;--good:#14804A;--bad:#D23B3B;--warn:#B26A00;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B0D1E;--panel:#15183A;--ink:#EEF0FF;--muted:#A3A9CC;--line:#2A2E5C;--accent:#9C8FFF;--ac:#0B0D1E;--hl:#FFC24D;--good:#5FD394;--bad:#FF8A80;--warn:#F2B35E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0B0D1E;--panel:#15183A;--ink:#EEF0FF;--muted:#A3A9CC;--line:#2A2E5C;--accent:#9C8FFF;--ac:#0B0D1E;--hl:#FFC24D;--good:#5FD394;--bad:#FF8A80;--warn:#F2B35E;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+h1{font-size:clamp(2rem,5.5vw,3.2rem);font-weight:800;letter-spacing:-.035em;margin:0 0 .4rem;line-height:1.05}
+h2{font-size:1.1rem;margin:0 0 .7rem}
+.sub{color:var(--muted);margin:0 0 1.4rem;max-width:40rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.2rem}
+button,input,select{font:inherit;color:inherit}
+button{background:var(--accent);color:var(--ac);border:0;border-radius:8px;padding:.55rem 1rem;font-weight:600;cursor:pointer}
+button.alt{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+ul{list-style:none;margin:0;padding:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+.back{margin:0 0 1.2rem}.back a{display:inline-block;color:var(--accent);font-weight:600;text-decoration:none;border:1.5px solid var(--line);border-radius:8px;padding:.3rem .8rem;background:var(--panel)}.back a:hover{border-color:var(--accent)}
+
+
+input,select,textarea{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.55rem .7rem;font:inherit;color:inherit}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.seg{display:inline-flex;border:1.5px solid var(--accent);border-radius:10px;overflow:hidden}.seg button{border-radius:0;background:transparent;color:var(--accent)}.seg button[aria-pressed="true"]{background:var(--accent);color:var(--ac)}
+.find label{font-weight:800;font-size:1.25rem;display:block;margin-bottom:.5rem}
+#q{font-size:1.3rem;padding:.8rem 1rem;border:2px solid var(--accent)}
+.rb{display:flex;justify-content:space-between;gap:1rem;width:100%;text-align:left;background:var(--panel);color:var(--ink);border:1px solid var(--line);margin-top:.4rem;padding:.7rem 1rem;font-size:1.05rem}.rb b{color:var(--accent)}
+#msg{margin:.7rem 0 0;font-weight:600;min-height:1.4rem}
+.main{display:grid;gap:1rem;margin-top:1rem}@media(min-width:960px){.main{grid-template-columns:1fr 340px;align-items:start}}
+#map{width:100%;height:auto;display:block}#map.org{touch-action:none}
+.floor{fill:color-mix(in srgb,var(--accent) 5%,var(--panel));stroke:var(--line)}
+.stage{fill:color-mix(in srgb,var(--accent) 14%,var(--panel));stroke:var(--accent)}
+.door{fill:color-mix(in srgb,var(--good) 18%,var(--panel));stroke:var(--good)}
+.lbl{text-anchor:middle;font:700 13px "IBM Plex Mono",monospace;fill:var(--muted);letter-spacing:.12em;pointer-events:none}
+.tb{cursor:pointer}.tb .top{fill:var(--panel);stroke:var(--accent);stroke-width:3}.tb.sel .top{stroke-width:7}
+.tb.hit .top{fill:var(--hl);stroke:var(--ink)}.tb.dim{opacity:.35}
+.seat{fill:none;stroke:var(--muted);stroke-width:2}.seat.f{fill:var(--accent);stroke:var(--accent)}
+.tn,.tc{text-anchor:middle;dominant-baseline:central;pointer-events:none}.tn{font-weight:800;fill:var(--ink)}.tc{fill:var(--muted)}.tc.over{fill:var(--bad);font-weight:700}
+.tb.hit .tn,.tb.hit .tc{fill:#14123D}
+.pulse{fill:none;stroke:var(--hl);stroke-width:5;transform-box:fill-box;transform-origin:center;animation:pl 1.4s ease-out infinite}
+@keyframes pl{0%{transform:scale(.85);opacity:1}100%{transform:scale(1.25);opacity:0}}
+.way{stroke:var(--hl);stroke-width:5;stroke-dasharray:3 12;stroke-linecap:round;animation:dash 1s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-30}}
+@media(prefers-reduced-motion:reduce){.pulse,.way{animation:none}}
+.tb:focus-visible{outline:3px solid var(--accent)}
+.leg{display:flex;gap:1.2rem;flex-wrap:wrap;color:var(--muted);font-size:.9rem;margin-top:.6rem}
+.dotf,.dote,.doth{display:inline-block;width:.8rem;height:.8rem;border-radius:50%;vertical-align:-.1em;margin-right:.35rem}.dotf{background:var(--accent)}.dote{border:2px solid var(--muted)}.doth{background:var(--hl)}
+#side h2{margin:0 0 .6rem;font-size:1.3rem}#side h3{margin:1rem 0 .4rem;font-size:1.05rem}#side label{display:block;font-weight:600;font-size:.92rem;margin:.6rem 0 .2rem}#side button{margin-top:.6rem}
+.note{color:var(--muted);font-size:.92rem}.warn{color:var(--bad);font-weight:600}
+.names li{padding:.35rem 0;border-top:1px solid var(--line)}.names li.me{font-weight:800;color:var(--accent)}
+.gl li{display:grid;grid-template-columns:1fr auto auto;gap:.4rem;align-items:center;padding:.3rem 0;border-top:1px solid var(--line)}.gl select{width:auto;max-width:8rem}
+.row{display:flex;gap:.5rem}.row input{flex:1}.row button{margin:0!important}
+#side button.sm{padding:.25rem .55rem;margin:0}button.danger{color:var(--bad);border-color:var(--bad)}
+#side hr{border:0;border-top:1px solid var(--line);margin:1rem 0}
+@media(min-width:960px){#side{max-height:80vh;overflow:auto}}
+</style></head><body><div class="wrap">
+<p class="back"><a href="../index.html#demos">← Back to portfolio</a></p>
+<header class="hd"><div><h1 id="ev"></h1><p class="sub" id="sb" style="margin:0"></p></div>
+<div class="seg" role="group" aria-label="View"><button id="mg" aria-pressed="true">Find my table</button><button id="mo" aria-pressed="false">Organiser</button></div></header>
+<section class="card find"><label for="q">Find your table</label><input id="q" type="search" placeholder="Type your name, for example Maya" autocomplete="off"><div id="res"></div><p id="msg" role="status"></p></section>
+<div class="main"><div class="card"><svg id="map" viewBox="0 0 1000 620" role="group" aria-label="Hall floor plan"></svg>
+<div class="leg"><span><i class="dotf"></i>Taken seat</span><span><i class="dote"></i>Free seat</span><span><i class="doth"></i>Your table</span><span id="st"></span></div></div>
+<aside class="card" id="side" aria-live="polite"></aside></div>
+<input type="file" id="imp" accept=".json,application/json" hidden>
+</div><script>
+const $=id=>document.getElementById(id),K='hall-v1',reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const LAY={banquet:{name:'Round tables',shape:'round',cap:8},long:{name:'Long tables',shape:'rect',w:190,h:54,cap:10},classroom:{name:'Classroom rows',shape:'rect',w:96,h:40,cap:2},ushape:{name:'U-shape',shape:'rect',w:120,h:46,cap:4}};
+let S=null,mode='guest',sel=null,hit=null,cur=null,drag=null;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+const tb=id=>S.tables.find(t=>t.id==id);
+function arrange(layout,N){const o=[],r10=v=>Math.round(v/10)*10;
+ if(layout=='ushape'){const A=340,B=660,T=A+B+A;for(let i=0;i<N;i++){const d=(i+.5)/N*T;let x,y;if(d<A){x=170;y=150+d}else if(d<A+B){x=170+d-A;y=500}else{x=830;y=500-(d-A-B)}o.push([r10(x),r10(y)])}return o}
+ const cols=layout=='banquet'?(N>9?5:N>6?4:3):layout=='long'?2:(N>10?5:4),rows=Math.ceil(N/cols);
+ for(let i=0;i<N;i++){const c=i%cols,r=Math.floor(i/cols);o.push([r10((c+.5)*1000/cols),r10(165+(r+.5)*(390/rows))])}return o}
+function sample(){const st={event:'Sample Event',layout:'banquet',tables:[],guests:[],tid:0,gid:0};
+ arrange('banquet',8).forEach((q,i)=>st.tables.push({id:++st.tid,n:i+1,name:'',x:q[0],y:q[1],cap:8}));
+ 'Amira Hassan,Daniel Okafor,Sofia Rossi,Liam Chen,Noor Al-Din,Maya Patel,Lucas Silva,Hannah Müller,Omar Farouk,Chloé Dubois,Ethan Brooks,Layla Haddad,Mateo García,Zara Ahmed,Noah Kim,Isla Murray,Yusuf Demir,Priya Nair,Jack Turner,Elena Petrova,Samir Khoury,Grace Liu,Tomás Costa,Aisha Bello'.split(',').forEach((nm,i)=>st.guests.push({id:++st.gid,name:nm,table:i<22?st.tables[Math.floor(i/3)].id:null}));
+ return st}
+const valid=d=>d&&Array.isArray(d.tables)&&Array.isArray(d.guests)&&LAY[d.layout];
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+async function init(){let d=null;try{const t=localStorage.getItem(K);if(t)d=JSON.parse(t)}catch(e){}
+ if(!valid(d)){d=null;try{const r=await fetch('hall-data.json',{cache:'no-store'});if(r.ok)d=await r.json()}catch(e){}}
+ S=valid(d)?d:sample();render()}
+/* map */
+function drawMap(){const L=LAY[S.layout],isR=L.shape=='round',cnt={};S.guests.forEach(g=>{if(g.table)cnt[g.table]=(cnt[g.table]||0)+1});
+ let s='<rect x="10" y="10" width="980" height="600" rx="22" class="floor"/><rect x="300" y="24" width="400" height="52" rx="12" class="stage"/><text x="500" y="56" class="lbl">STAGE / FRONT</text><rect x="430" y="574" width="140" height="30" rx="8" class="door"/><text x="500" y="594" class="lbl">ENTRANCE</text>';
+ const h=hit&&tb(hit);if(h)s+='<line class="way" x1="500" y1="574" x2="'+h.x+'" y2="'+h.y+'"/>';
+ S.tables.forEach(t=>{const c=cnt[t.id]||0,cap=Math.min(t.cap,24),w=L.w,hh=L.h,isH=h&&h.id==t.id;let seats='',shape;
+  if(isR){for(let i=0;i<cap;i++){const a=i/cap*6.283-1.57;seats+='<circle class="seat'+(i<c?' f':'')+'" cx="'+(Math.cos(a)*62).toFixed(1)+'" cy="'+(Math.sin(a)*62).toFixed(1)+'" r="7"/>'}shape='<circle class="top" r="46"/>'}
+  else{const top=Math.ceil(cap/2);[[top,-hh/2-13,0],[cap-top,hh/2+13,top]].forEach(([n,y,off])=>{for(let i=0;i<n;i++)seats+='<circle class="seat'+(off+i<c?' f':'')+'" cx="'+((i+.5)/n*w-w/2).toFixed(1)+'" cy="'+y+'" r="7"/>'});shape='<rect class="top" x="'+(-w/2)+'" y="'+(-hh/2)+'" width="'+w+'" height="'+hh+'" rx="10"/>'}
+  const ns=isR?26:(hh>50?22:17),cs=isR?13:(hh>50?12:11),pulse=isH?(isR?'<circle class="pulse" r="72"/>':'<rect class="pulse" x="'+(-w/2-14)+'" y="'+(-hh/2-30)+'" width="'+(w+28)+'" height="'+(hh+60)+'" rx="20"/>'):'';
+  s+='<g class="tb'+(isH?' hit':'')+(sel==t.id?' sel':'')+(h&&!isH?' dim':'')+'" data-id="'+t.id+'" transform="translate('+t.x+' '+t.y+')" tabindex="0" role="button" aria-label="Table '+t.n+(t.name?', '+esc(t.name):'')+', '+c+' of '+t.cap+' seats filled">'+pulse+seats+shape+'<text class="tn" y="'+(-cs*.7).toFixed(1)+'" font-size="'+ns+'">'+t.n+'</text><text class="tc'+(c>t.cap?' over':'')+'" y="'+(ns*.65).toFixed(1)+'" font-size="'+cs+'">'+c+'/'+t.cap+'</text></g>'});
+ $('map').innerHTML=s;$('map').classList.toggle('org',mode=='org');
+ const un=S.guests.filter(g=>!g.table).length;$('st').textContent=S.guests.length+' guests · '+S.tables.length+' tables · '+un+' not seated'}
+/* search */
+function choose(id,scroll){const g=S.guests.find(x=>x.id==id);if(!g)return;const t=tb(g.table);cur=g.id;hit=t?t.id:null;sel=hit;
+ $('msg').textContent=t?'Found you, '+g.name+'. You are on Table '+t.n+(t.name?' ('+t.name+')':'')+'. Follow the dotted line from the entrance.':g.name+' is not seated yet. Please ask the organiser.';
+ drawMap();renderSide();if(scroll)$('map').scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'})}
+function renderRes(){const q=norm($('q').value),r=$('res');hit=null;cur=null;
+ if(!q){r.innerHTML='';$('msg').textContent='';drawMap();renderSide();return}
+ const f=S.guests.filter(g=>norm(g.name).includes(q)).slice(0,6);
+ r.innerHTML=f.map(g=>{const t=tb(g.table);return '<button class="rb" data-g="'+g.id+'"><span>'+esc(g.name)+'</span><b>'+(t?'Table '+t.n:'Not seated yet')+'</b></button>'}).join('');
+ if(f.length==1){choose(f[0].id,false);return}
+ $('msg').textContent=f.length?'Pick your name from the list.':'No match yet. Check the spelling, or try just your first or last name.';drawMap()}
+$('q').addEventListener('input',renderRes);
+$('res').addEventListener('click',e=>{const b=e.target.closest('button');if(b)choose(b.dataset.g,true)});
+/* side */
+const tOpts=(c,first)=>'<option value="">'+first+'</option>'+S.tables.map(t=>'<option value="'+t.id+'"'+(t.id==c?' selected':'')+'>Table '+t.n+'</option>').join('');
+function renderSide(){const t=tb(sel);if(mode=='guest'){
+  if(!t){$('side').innerHTML='<h2>Tables</h2><p class="note">Tap a table on the map to see who is sitting there.</p>';return}
+  const gs=S.guests.filter(g=>g.table==t.id).sort((a,b)=>a.name.localeCompare(b.name));
+  $('side').innerHTML='<h2>Table '+t.n+(t.name?' · '+esc(t.name):'')+'</h2><p class="note">'+gs.length+' of '+t.cap+' seats filled</p><ul class="names">'+gs.map(g=>'<li'+(g.id==cur?' class="me"':'')+'>'+esc(g.name)+'</li>').join('')+'</ul>';return}
+ const un=S.guests.filter(g=>!g.table);
+ let h='<h2>Organiser tools</h2><label>Event name<input data-f="ev" value="'+esc(S.event)+'" maxlength="60"></label><label>Hall layout<select data-f="layout">'+Object.keys(LAY).map(k=>'<option value="'+k+'"'+(k==S.layout?' selected':'')+'>'+LAY[k].name+'</option>').join('')+'</select></label><p class="note">Changing the layout rearranges every table. Drag a table on the map to move it.</p><button data-a="addt">Add a table</button>';
+ if(t){const gs=S.guests.filter(g=>g.table==t.id);
+  h+='<hr><h3>Table '+t.n+'</h3><label>Table label (optional)<input data-f="tname" value="'+esc(t.name)+'" maxlength="30"></label><label>Seats<input data-f="tcap" type="number" min="1" max="24" value="'+t.cap+'"></label>'+(gs.length>t.cap?'<p class="warn">Over capacity by '+(gs.length-t.cap)+'.</p>':'')+'<ul class="gl">'+gs.map(g=>'<li><span>'+esc(g.name)+'</span><select data-mv="'+g.id+'" aria-label="Move '+esc(g.name)+'">'+tOpts(t.id,'Not seated')+'</select><button class="alt sm" data-a="rmg" data-id="'+g.id+'" aria-label="Remove '+esc(g.name)+'">✕</button></li>').join('')+'</ul><button class="alt danger" data-a="delt">Delete this table</button>'}
+ else h+='<p class="note">Click a table on the map to edit it.</p>';
+ h+='<hr><h3>Add guests '+(t?'to Table '+t.n:'(not seated yet)')+'</h3><div class="row"><input id="ng" placeholder="Guest name" maxlength="60"><button data-a="addg">Add</button></div><label>Or paste many names, one per line<textarea id="bulk" rows="4"></textarea></label><button class="alt" data-a="bulk">Add these names</button>';
+ h+='<hr><h3>Not seated yet ('+un.length+')</h3><ul class="gl">'+un.map(g=>'<li><span>'+esc(g.name)+'</span><select data-mv="'+g.id+'" aria-label="Seat '+esc(g.name)+'">'+tOpts(null,'Seat at…')+'</select><button class="alt sm" data-a="rmg" data-id="'+g.id+'" aria-label="Remove '+esc(g.name)+'">✕</button></li>').join('')+'</ul>';
+ h+='<hr><h3>Save and publish</h3><p class="note">Changes are saved on this device. Export the file and add it next to this page on your site so guests see the same plan.</p><button data-a="export">Export hall-data.json</button> <button class="alt" data-a="import">Import a file</button> <button class="alt" data-a="pub">Load published file</button> <button class="alt danger" data-a="reset">Reset to sample</button>';
+ $('side').innerHTML=h}
+function addNames(list){list.map(s=>s.trim()).filter(Boolean).forEach(n=>S.guests.push({id:++S.gid,name:n,table:sel||null}))}
+$('side').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+ if(a=='addt'){const n=Math.max(0,...S.tables.map(t=>t.n))+1;S.tables.push({id:++S.tid,n,name:'',x:500,y:330,cap:LAY[S.layout].cap});sel=S.tid}
+ else if(a=='delt'){S.guests.forEach(g=>{if(g.table==sel)g.table=null});S.tables=S.tables.filter(t=>t.id!=sel);sel=null}
+ else if(a=='rmg')S.guests=S.guests.filter(g=>g.id!=b.dataset.id);
+ else if(a=='addg'){addNames([$('ng').value])}
+ else if(a=='bulk'){addNames($('bulk').value.split('\n'))}
+ else if(a=='export'){const f=new Blob([JSON.stringify(S,null,1)],{type:'application/json'}),l=document.createElement('a');l.href=URL.createObjectURL(f);l.download='hall-data.json';l.click();setTimeout(()=>URL.revokeObjectURL(l.href),1000);return}
+ else if(a=='import'){$('imp').click();return}
+ else if(a=='pub'){fetch('hall-data.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{if(!valid(d))throw 0;S=d;sel=null;try{localStorage.removeItem(K)}catch(e){}render()}).catch(()=>{$('msg').textContent='No published hall-data.json was found next to this page.'});return}
+ else if(a=='reset'){S=sample();sel=null}
+ hit=null;save();render()});
+$('side').addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.id=='ng'){addNames([e.target.value]);save();render()}});
+$('side').addEventListener('change',e=>{const el=e.target,f=el.dataset.f,t=tb(sel);
+ if(f=='ev')S.event=el.value.trim()||'My event';
+ else if(f=='layout'){S.layout=el.value;arrange(S.layout,S.tables.length).forEach((q,i)=>{S.tables[i].x=q[0];S.tables[i].y=q[1]})}
+ else if(f=='tname'&&t)t.name=el.value.trim();
+ else if(f=='tcap'&&t)t.cap=Math.max(1,Math.min(24,+el.value||1));
+ else if(el.dataset.mv){const g=S.guests.find(x=>x.id==el.dataset.mv);if(g)g.table=el.value?+el.value:null}
+ else return;hit=null;save();render()});
+$('imp').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const d=JSON.parse(t);if(!valid(d))throw 0;S=d;sel=null;save();render()}).catch(()=>{$('msg').textContent='That file is not a valid hall plan.'});e.target.value=''});
+/* map interaction */
+const svgPt=e=>{const m=$('map'),p=m.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(m.getScreenCTM().inverse())};
+function pick(id){sel=id;if(id!=hit)hit=null;drawMap();renderSide()}
+$('map').addEventListener('pointerdown',e=>{const g=e.target.closest('.tb');if(!g)return;const id=+g.dataset.id;
+ if(mode=='org'){const t=tb(id),p=svgPt(e);drag={t,g,id,dx:p.x-t.x,dy:p.y-t.y,mv:false,sx:e.clientX,sy:e.clientY};$('map').setPointerCapture(e.pointerId)}else pick(id)});
+$('map').addEventListener('pointermove',e=>{if(!drag)return;if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)>4)drag.mv=true;if(!drag.mv)return;const p=svgPt(e);
+ drag.t.x=Math.max(60,Math.min(940,Math.round((p.x-drag.dx)/10)*10));drag.t.y=Math.max(120,Math.min(540,Math.round((p.y-drag.dy)/10)*10));drag.g.setAttribute('transform','translate('+drag.t.x+' '+drag.t.y+')')});
+$('map').addEventListener('pointerup',()=>{if(!drag)return;const d=drag;drag=null;if(d.mv){save();pick(d.id)}else pick(d.id)});
+$('map').addEventListener('keydown',e=>{const g=e.target.closest('.tb');if(g&&(e.key=='Enter'||e.key==' ')){e.preventDefault();pick(+g.dataset.id)}});
+function setMode(m){mode=m;$('mg').setAttribute('aria-pressed',m=='guest');$('mo').setAttribute('aria-pressed',m=='org');render()}
+$('mg').onclick=()=>setMode('guest');$('mo').onclick=()=>setMode('org');
+function render(){$('ev').textContent=S.event;document.title=S.event+' – Hall Planner';
+ $('sb').textContent=mode=='guest'?'Search your name to see where to sit.':'Organiser view: edit tables and guests. Changes are saved on this device until you export them.';
+ drawMap();renderSide()}
+init();
+</script></body></html>
