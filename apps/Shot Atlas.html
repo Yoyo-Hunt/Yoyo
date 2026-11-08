@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap"><title>Shoe Atlas</title><style>:root{--bg:#F5F6FC;--panel:#FFF;--ink:#12142B;--muted:#5A5F7D;--line:#E1E4F2;--accent:#4F3FE8;--ac:#FFF;--hl:#FFB020;--good:#14804A;--bad:#D23B3B;--warn:#B26A00;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B0D1E;--panel:#15183A;--ink:#EEF0FF;--muted:#A3A9CC;--line:#2A2E5C;--accent:#9C8FFF;--ac:#0B0D1E;--hl:#FFC24D;--good:#5FD394;--bad:#FF8A80;--warn:#F2B35E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0B0D1E;--panel:#15183A;--ink:#EEF0FF;--muted:#A3A9CC;--line:#2A2E5C;--accent:#9C8FFF;--ac:#0B0D1E;--hl:#FFC24D;--good:#5FD394;--bad:#FF8A80;--warn:#F2B35E;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+h1{font-size:clamp(2rem,5.5vw,3.2rem);font-weight:800;letter-spacing:-.035em;margin:0 0 .4rem;line-height:1.05}
+h2{font-size:1.1rem;margin:0 0 .7rem}
+.sub{color:var(--muted);margin:0 0 1.4rem;max-width:40rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.2rem}
+button,input,select{font:inherit;color:inherit}
+button{background:var(--accent);color:var(--ac);border:0;border-radius:8px;padding:.55rem 1rem;font-weight:600;cursor:pointer}
+button.alt{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+ul{list-style:none;margin:0;padding:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+.back{margin:0 0 1.2rem}.back a{display:inline-block;color:var(--accent);font-weight:600;text-decoration:none;border:1.5px solid var(--line);border-radius:8px;padding:.3rem .8rem;background:var(--panel)}.back a:hover{border-color:var(--accent)}
+
+.hero{display:grid;gap:1.5rem;margin:.3rem 0 2.2rem}@media(min-width:900px){.hero{grid-template-columns:1fr 1.1fr;align-items:start}}
+.tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem}.tabs button{background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:.4rem .85rem}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--ac);border-color:var(--accent)}
+.stage{--c:#4F3FE8;background:radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--c) 60%,#0B0D1E) 0,#0B0D1E 74%);border-radius:24px;padding:1.5rem 1rem 1.3rem;color:#EEF0FF;text-align:center}
+#shoe svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto;transition:transform .12s ease-out}
+.hint{margin:.2rem 0 .9rem;font-size:.88rem;color:#A3A9CC}
+.sw{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap}.sw button{width:2.2rem;height:2.2rem;border-radius:50%;padding:0;background:var(--s);border:3px solid transparent;box-shadow:0 0 0 1px rgba(255,255,255,.35)}
+.sw button[aria-pressed="true"]{border-color:#fff}
+.info h2{font-size:1.7rem;letter-spacing:-.02em;margin:0}.tag{color:var(--muted);margin:.1rem 0 1rem}
+.row{margin:.65rem 0}.row small{display:block;color:var(--muted);font-weight:600}
+.rate{display:grid;grid-template-columns:6.5rem 1fr;gap:.7rem;align-items:center;margin:.4rem 0;font-size:.93rem}
+.bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);border-radius:5px;transition:width .3s}
+.stats{display:grid;gap:1rem;margin-bottom:2.2rem}@media(min-width:700px){.stats{grid-template-columns:repeat(3,1fr)}}
+.stats b{display:block;font-size:2.8rem;letter-spacing:-.04em;line-height:1;color:var(--accent)}.stats span{color:var(--muted)}
+.anat{display:grid;gap:1rem;margin-bottom:2.2rem}@media(min-width:800px){.anat{grid-template-columns:1.4fr 1fr}}
+#an{--c:#4F3FE8;width:100%;height:auto;display:block}#an circle{cursor:pointer}#an .hs{fill:var(--hl);stroke:#fff;stroke-width:3}
+h2.sec{font-size:1.5rem;letter-spacing:-.02em;margin:0 0 .8rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1rem}
+.gcard{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:.8rem;text-align:left}
+.gcard:hover{border-color:var(--accent)}.gcard svg{width:100%;height:auto;display:block}.gcard b{display:block}.gcard span{color:var(--muted);font-size:.9rem;font-weight:400}
+footer{color:var(--muted);font-size:.88rem;margin-top:2rem}
+</style></head><body><div class="wrap">
+<p class="back"><a href="../index.html#demos">← Back to portfolio</a></p>
+<section class="hero"><div><h1>Shoe Atlas</h1><p class="sub">A visual guide to seven kinds of shoes. Pick a type, try a colour, and see what makes each one different.</p>
+<div class="tabs" id="tabs" role="tablist" aria-label="Shoe types"></div><div class="card info" id="info" aria-live="polite"></div></div>
+<div class="stage" id="stage"><div id="shoe"></div><p class="hint">Move your pointer over the shoe to tilt it</p><div class="sw" id="sw" role="group" aria-label="Shoe colour"></div></div></section>
+<section class="stats"><div class="card"><b>26</b><span>bones in each human foot</span></div><div class="card"><b>25%</b><span>of the body’s 206 bones are in the feet</span></div><div class="card"><b>5,500</b><span>years old: the oldest known leather shoe, found in a cave in Armenia</span></div></section>
+<h2 class="sec">Anatomy of a sneaker</h2>
+<section class="anat"><div class="card"><svg id="an" viewBox="0 0 420 230" role="group" aria-label="Sneaker with clickable parts"></svg></div><div class="card" id="part" aria-live="polite"></div></section>
+<h2 class="sec">All seven at a glance</h2><div class="grid" id="grid"></div>
+<footer>Illustrations are simple drawings made with SVG. Ratings are a rough guide, not lab results.</footer>
+</div><script>
+const $=id=>document.getElementById(id),SO='#F4F4FA',DK='#1B1E3A';
+const FS='<path d="M36 150H372Q384 150 384 162Q384 178 362 178H60Q36 178 36 162Z" fill="'+SO+'"/><path d="M40 174H378" stroke="'+DK+'" stroke-width="6" stroke-linecap="round"/>';
+const LC='<path d="M158 104l14 12M184 108l14 12M210 111l14 12M236 114l14 12" stroke="#fff" stroke-width="4" stroke-linecap="round"/>';
+const SNK=FS+'<path d="M44 150V92Q44 80 58 80H92Q106 80 114 92L140 104L250 118Q335 124 372 140Q380 146 372 150Z" fill="var(--c)"/><path d="M96 80Q120 68 144 94L112 98Z" fill="#fff" opacity=".35"/><path d="M300 126Q350 130 372 142V150H300Z" fill="#000" opacity=".14"/>'+LC+'<path d="M110 142Q200 124 290 146" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none" opacity=".85"/>';
+let dots='';for(let r=0;r<3;r++)for(let c=0;c<9;c++)dots+='<circle cx="'+(150+c*22+r*8)+'" cy="'+(114+r*12+c*2)+'" r="2.6"/>';
+const SH={
+sneaker:{gy:184,d:SNK},
+running:{gy:187,d:'<path d="M34 130V166Q34 182 56 182H356Q386 182 386 160V154Q320 150 250 158Q150 166 90 150Q60 142 34 130Z" fill="'+SO+'"/><path d="M40 177H380" stroke="'+DK+'" stroke-width="5" stroke-linecap="round"/><path d="M44 130V86Q44 74 58 74H86Q100 74 108 86L130 100L230 112Q330 118 382 152Q300 148 230 157Q140 163 90 148Q60 140 44 130Z" fill="var(--c)"/><g fill="#fff" opacity=".4">'+dots+'</g><path d="M60 162Q160 174 300 162" stroke="var(--c)" stroke-width="5" fill="none"/><path d="M96 74Q118 64 134 100L106 94Z" fill="#fff" opacity=".35"/>'},
+boot:{gy:187,d:'<path d="M50 168H372V178Q372 182 366 182H56Q50 182 50 178Z" fill="'+DK+'"/><path d="M60 46H150V122Q150 130 162 132L300 142Q356 146 368 160V168H50V60Q50 46 60 46Z" fill="var(--c)"/><path d="M64 46V26H88V46Z" fill="var(--c)"/><rect x="96" y="60" width="52" height="68" fill="#000" opacity=".18"/><path d="M54 162H366" stroke="#fff" stroke-dasharray="6 5" opacity=".7" fill="none" stroke-width="2"/><path d="M150 132L300 144" stroke="#000" opacity=".2" stroke-width="3"/>'},
+oxford:{gy:182,d:'<path d="M40 156H384Q388 164 380 166H44Q36 166 40 156Z" fill="'+DK+'"/><path d="M44 162H112V178H44Z" fill="'+DK+'"/><path d="M52 156V100Q52 90 64 88H100L120 104L240 120Q330 124 376 148Q384 152 380 156Z" fill="var(--c)"/><path d="M240 126Q320 130 366 148" stroke="#fff" opacity=".35" stroke-width="3" fill="none"/><path d="M296 124Q320 140 300 156M296 124Q326 130 352 146" stroke="#000" opacity=".3" fill="none" stroke-width="2" stroke-dasharray="3 3"/><path d="M134 110l34 12M150 114l34 12M166 117l34 12M182 120l34 12" stroke="#fff" opacity=".85" stroke-width="3" stroke-linecap="round"/>'},
+heel:{gy:206,d:'<path d="M56 120Q60 96 84 92Q100 108 130 136Q200 160 290 172Q350 178 388 202Q300 204 236 196Q150 184 92 160Q58 148 56 120Z" fill="var(--c)"/><path d="M60 142L92 158L76 204H64Z" fill="'+DK+'"/><path d="M92 160Q150 184 236 196Q300 204 388 202" stroke="'+DK+'" stroke-width="4" fill="none"/><path d="M110 124Q190 152 280 168" stroke="#fff" opacity=".45" stroke-width="3" fill="none"/>'},
+sandal:{gy:190,d:'<path d="M40 170Q30 162 46 158L330 150Q388 148 386 168Q382 180 330 182L60 186Q40 186 40 170Z" fill="'+DK+'"/><path d="M50 166L330 156Q372 156 374 168Q370 174 330 176L62 180Q46 180 50 166Z" fill="#C8A27A"/><path d="M240 158Q268 106 318 154" stroke="var(--c)" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M110 164Q132 94 192 158" stroke="var(--c)" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M66 170Q56 126 100 120" stroke="var(--c)" stroke-width="14" fill="none" stroke-linecap="round"/><circle cx="152" cy="116" r="7" fill="'+SO+'"/>'},
+hightop:{gy:184,d:FS+'<path d="M44 150V44Q44 32 58 32H98Q110 32 112 46L116 84L140 104L250 118Q335 124 372 140Q380 146 372 150Z" fill="var(--c)"/><path d="M98 32L104 84L140 100L116 84Z" fill="#fff" opacity=".3"/><path d="M300 126Q350 130 372 142V150H300Z" fill="#000" opacity=".14"/>'+LC+'<circle cx="76" cy="84" r="16" fill="#fff" opacity=".9"/><circle cx="76" cy="84" r="9" fill="var(--c)"/>'}};
+const svg=(k,extra)=>'<svg viewBox="0 0 420 230" role="img" aria-label="Illustration of a '+T.find(t=>t.id==k).name.toLowerCase()+'"><ellipse cx="210" cy="'+SH[k].gy+'" rx="175" ry="9" fill="#000" opacity=".28"/>'+SH[k].d+(extra||'')+'</svg>';
+const T=[
+{id:'sneaker',name:'Sneaker',tag:'The everyday all-rounder.',best:'Daily wear, travel, casual outfits',mat:'Canvas or leather upper, rubber sole',fact:'The word “sneaker” dates to the 1800s, when rubber soles let people walk quietly.',r:[4,3,2],c:'#4F3FE8'},
+{id:'running',name:'Running shoe',tag:'Built to cushion every stride.',best:'Running, the gym, long walks',mat:'Mesh upper, foam midsole',fact:'Many modern racing shoes pair springy foam with a stiff plate in the midsole to help runners use less energy.',r:[5,4,1],c:'#E5484D'},
+{id:'boot',name:'Boot',tag:'Covers the ankle for protection.',best:'Cold weather, work, hiking',mat:'Leather or suede, tough rubber sole',fact:'Elastic-sided boots were designed in the 1830s and were made popular partly by Queen Victoria.',r:[3,5,2],c:'#8A5A3C'},
+{id:'oxford',name:'Oxford',tag:'The classic dress shoe.',best:'Offices, weddings, formal events',mat:'Polished leather, leather sole',fact:'Oxfords have a closed lacing system, and the style is linked to Oxford University students of the 1800s.',r:[2,2,5],c:'#5A3A2A'},
+{id:'heel',name:'High heel',tag:'Raises the heel for height and shape.',best:'Evenings, events, formal wear',mat:'Leather or satin upper, raised heel',fact:'Heels have roots in Persian riding shoes, where a heel helped hold the foot in the stirrup.',r:[1,1,5],c:'#D23B6B'},
+{id:'sandal',name:'Sandal',tag:'Open and breathable.',best:'Hot weather, the beach, casual days',mat:'Straps over a flat sole',fact:'Some of the oldest known shoes are sandals, about 9,000 to 10,000 years old, found in Oregon.',r:[4,2,1],c:'#12A594'},
+{id:'hightop',name:'High-top',tag:'Extra coverage around the ankle.',best:'Basketball, streetwear, skating',mat:'Canvas or leather upper, cushioned sole',fact:'The Converse All Star, first sold in 1917 as a basketball shoe, became one of the best-selling shoes ever.',r:[3,4,2],c:'#F5A524'}];
+const PAL=[['Indigo','#4F3FE8'],['Red','#E5484D'],['Teal','#12A594'],['Amber','#F5A524'],['Ink','#2B2F55'],['Cloud','#DADCEF']];
+const col={};T.forEach(t=>col[t.id]=t.c);let cur='sneaker';
+function show(){const t=T.find(x=>x.id==cur);
+ $('tabs').innerHTML=T.map(x=>'<button role="tab" data-k="'+x.id+'" aria-selected="'+(x.id==cur)+'">'+x.name+'</button>').join('');
+ $('stage').style.setProperty('--c',col[cur]);$('shoe').innerHTML=svg(cur);
+ $('sw').innerHTML=PAL.map(p=>'<button style="--s:'+p[1]+'" data-c="'+p[1]+'" aria-label="'+p[0]+'" aria-pressed="'+(col[cur]==p[1])+'"></button>').join('');
+ const L=['Comfort','Support','Dressiness'];
+ $('info').innerHTML='<h2>'+t.name+'</h2><p class="tag">'+t.tag+'</p><div class="row"><small>Best for</small>'+t.best+'</div><div class="row"><small>Made from</small>'+t.mat+'</div><div class="row"><small>Fun fact</small>'+t.fact+'</div>'+t.r.map((v,i)=>'<div class="rate"><span>'+L[i]+'</span><div class="bar" role="img" aria-label="'+v+' out of 5"><i style="width:'+v*20+'%"></i></div></div>').join('')}
+$('tabs').onclick=e=>{const b=e.target.closest('button');if(b){cur=b.dataset.k;show()}};
+$('sw').onclick=e=>{const b=e.target.closest('button');if(b){col[cur]=b.dataset.c;show()}};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+$('stage').addEventListener('pointermove',e=>{if(reduce)return;const r=e.currentTarget.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;$('shoe').firstElementChild.style.transform='perspective(900px) rotateY('+(x*16)+'deg) rotateX('+(-y*10)+'deg)'});
+$('stage').addEventListener('pointerleave',()=>{$('shoe').firstElementChild.style.transform=''});
+const P=[['Toe box',340,136,'The front of the shoe. A roomy toe box lets your toes spread out, which helps comfort on long days.'],['Laces',200,112,'Laces tighten the shoe around your foot so it stays put instead of sliding forward.'],['Tongue',122,84,'The padded flap under the laces. It protects the top of your foot from lace pressure.'],['Collar',68,82,'The opening around the ankle. Padding here keeps your heel and ankle comfortable.'],['Heel counter',46,122,'A stiff cup at the back that holds your heel in place and adds stability.'],['Midsole',160,160,'The cushioning layer between your foot and the ground, often made of foam.'],['Outsole',330,176,'The tough rubber layer that touches the ground. Its tread pattern gives you grip.']];
+let pi=1;
+function anat(){$('an').innerHTML=SNK+P.map((p,i)=>'<circle class="hs" data-i="'+i+'" cx="'+p[1]+'" cy="'+p[2]+'" r="'+(i==pi?13:9)+'" tabindex="0" role="button" aria-label="'+p[0]+'"/>').join('');
+ $('part').innerHTML='<h2 style="font-size:1.5rem;margin:0 0 .4rem">'+P[pi][0]+'</h2><p style="margin:0">'+P[pi][3]+'</p><p class="mut" style="color:var(--muted);margin:1rem 0 0;font-size:.9rem">Click the yellow dots to explore each part.</p>'}
+$('an').addEventListener('click',e=>{const c=e.target.closest('circle');if(c){pi=+c.dataset.i;anat()}});
+$('an').addEventListener('keydown',e=>{const c=e.target.closest('circle');if(c&&(e.key=='Enter'||e.key==' ')){e.preventDefault();pi=+c.dataset.i;anat();$('an').querySelector('[data-i="'+pi+'"]').focus()}});
+$('grid').innerHTML=T.map(t=>'<button class="gcard" data-k="'+t.id+'" style="--c:'+t.c+'">'+svg(t.id)+'<b>'+t.name+'</b><span>'+t.tag+'</span></button>').join('');
+$('grid').onclick=e=>{const b=e.target.closest('button');if(b){cur=b.dataset.k;show();scrollTo({top:0,behavior:reduce?'auto':'smooth'})}};
+show();anat();
+</script></body></html>
