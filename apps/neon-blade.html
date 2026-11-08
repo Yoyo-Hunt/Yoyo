@@ -37,7 +37,9 @@ canvas{width:100%;aspect-ratio:1;display:block;border-radius:18px;border:1px sol
 <div class="hud"><span><small>Score</small> <b id="sc">0</b></span><span><small>Wave</small> <b id="wv">0</b></span><span><small>Combo</small> <b id="cb">×1</b></span><span><small>Lives</small> <b id="lv" aria-label="3 lives">♥♥♥</b></span><span><small>Best</small> <b id="bs">0</b></span></div>
 <div class="game"><canvas id="cv" aria-label="Neon Blade game board"></canvas>
 <div class="ov" id="ov"><h2 id="ot">Neon Blade</h2><p id="op">Point at the drones’ bolts to block them. Every deflected bolt flies back and takes out a drone. Chain deflects for a bigger combo.</p><button id="go">Start</button></div></div>
-<div class="opts"><div class="sw" id="sw" role="group" aria-label="Blade colour"><span>Blade</span></div><button id="mu" class="alt">Sound: on</button></div>
+<div class="opts"><div class="sw" id="sw" role="group" aria-label="Blade colour"><span>Blade</span></div><button id="mu" class="alt">Audio: Sound effects</button></div>
+<div id="yt" hidden style="max-width:320px;margin:.9rem auto 0"><div id="ytp"></div></div>
+<p id="mn" class="help" role="status"></p>
 <p class="help">Move your mouse or finger to aim. Or use A / D or the left and right arrows. Press Space to pause. The blade turns at a limited speed, so aim early.</p>
 </div><script>
 const $=id=>document.getElementById(id),cv=$('cv'),cx=cv.getContext('2d'),W=640,C=320,L=78,TAU=Math.PI*2;cv.width=cv.height=W;
@@ -49,9 +51,9 @@ try{best=+localStorage.getItem('nbBest')||0}catch(e){}
 const wrapA=a=>{while(a>Math.PI)a-=TAU;while(a<-Math.PI)a+=TAU;return a};
 function segDist(px,py,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,t=Math.max(0,Math.min(1,((px-ax)*dx+(py-ay)*dy)/(dx*dx+dy*dy)));return Math.hypot(px-ax-t*dx,py-ay-t*dy)}
 /* sound */
-let ac=null,mute=false,hum=null,hg=null;
+let ac=null,mode=0,hum=null,hg=null;
 function aud(){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)();hum=ac.createOscillator();hg=ac.createGain();hum.type='sawtooth';hum.frequency.value=70;hg.gain.value=0;hum.connect(hg).connect(ac.destination);hum.start()}catch(e){ac=null}}if(ac&&ac.state=='suspended')ac.resume()}
-function beep(f,d,ty,v){if(!ac||mute)return;const o=ac.createOscillator(),g=ac.createGain(),n=ac.currentTime;o.type=ty;o.frequency.setValueAtTime(f,n);o.frequency.exponentialRampToValueAtTime(Math.max(30,f*.5),n+d);g.gain.setValueAtTime(v,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(g).connect(ac.destination);o.start();o.stop(n+d)}
+function beep(f,d,ty,v){if(!ac||mode!=0)return;const o=ac.createOscillator(),g=ac.createGain(),n=ac.currentTime;o.type=ty;o.frequency.setValueAtTime(f,n);o.frequency.exponentialRampToValueAtTime(Math.max(30,f*.5),n+d);g.gain.setValueAtTime(v,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(g).connect(ac.destination);o.start();o.stop(n+d)}
 /* game */
 function sparks(x,y,c,n){for(let i=0;i<n;i++){const a=Math.random()*TAU,s=60+Math.random()*220;pt.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:.35+Math.random()*.35,c})}}
 function nearest(b){let q=null,m=1e9;en.forEach(e=>{const d=Math.hypot(e.x-b.x,e.y-b.y);if(d<m){m=d;q=e}});return q}
@@ -69,7 +71,7 @@ function step(dt){
  if(keys.ArrowLeft||keys.a)aim-=4.5*dt;if(keys.ArrowRight||keys.d)aim+=4.5*dt;
  const df=wrapA(aim-ang),sp=Math.max(-11*dt,Math.min(11*dt,df));ang+=sp;spd=dt?Math.abs(sp)/dt:0;tr.push(ang);if(tr.length>7)tr.shift();
  tm+=dt;shake=Math.max(0,shake-dt*1.5);flash=Math.max(0,flash-dt);tt=Math.max(0,tt-dt);
- if(hg)hg.gain.value=(mute||st!='run')?0:.02+Math.min(spd,11)/11*.04,hum.frequency.value=70+spd*5;
+ if(hg)hg.gain.value=(mode!=0||st!='run')?0:.02+Math.min(spd,11)/11*.04,hum.frequency.value=70+spd*5;
  for(let i=pt.length-1;i>=0;i--){const p=pt[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt;if(p.l<=0)pt.splice(i,1)}
  if(st!='run')return;
  const dx=Math.cos(ang),dy=Math.sin(ang),ax=C+dx*22,ay=C+dy*22,bx=C+dx*(22+L),by=C+dy*(22+L);
@@ -116,12 +118,18 @@ function frame(ts){const dt=Math.min(.033,(ts-last)/1000||0);last=ts;step(dt);dr
 /* input */
 function aimTo(e){const r=cv.getBoundingClientRect();aim=Math.atan2((e.clientY-r.top)*W/r.height-C,(e.clientX-r.left)*W/r.width-C)}
 cv.addEventListener('pointermove',aimTo);cv.addEventListener('pointerdown',aimTo);
-function pause(){if(st=='run')st='pause';else if(st=='pause')st='run'}
+function pause(){if(st=='run')st='pause';else if(st=='pause')st='run';syncMus()}
 addEventListener('keydown',e=>{const k=e.key.length==1?e.key.toLowerCase():e.key;keys[k]=true;if(k==' '||k=='p'){e.preventDefault();pause()}if(k.startsWith('Arrow'))e.preventDefault()});
 addEventListener('keyup',e=>{keys[e.key.length==1?e.key.toLowerCase():e.key]=false});
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&st=='run')st='pause'});
-$('go').onclick=()=>{aud();reset();$('ov').hidden=true};
-$('mu').onclick=e=>{mute=!mute;e.target.textContent='Sound: '+(mute?'off':'on')};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&st=='run')st='pause';syncMus()});
+$('go').onclick=()=>{aud();reset();$('ov').hidden=true;syncMus()};
+const VID='09LTT0xwdfw';let yt=null,ytReady=false;
+function label(){$('mu').textContent='Audio: '+['Sound effects','Music on repeat','Off'][mode]}
+function ytFail(){mode=0;label();$('yt').hidden=true;syncMus();$('mn').textContent='The music could not load. The video may block embedding, or you may be offline.'}
+function mkYT(){yt=new YT.Player('ytp',{width:320,height:200,videoId:VID,playerVars:{playsinline:1,rel:0,loop:1,playlist:VID},events:{onReady:()=>{ytReady=true;syncMus()},onStateChange:e=>{if(e.data===0){yt.seekTo(0);yt.playVideo()}},onError:ytFail}})}
+function loadYT(){if(window.YT&&YT.Player){mkYT();return}window.onYouTubeIframeAPIReady=mkYT;const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';s.onerror=ytFail;document.head.appendChild(s)}
+function syncMus(){if(!yt||!ytReady)return;if(mode==1&&st!='pause'&&!document.hidden)yt.playVideo();else yt.pauseVideo()}
+$('mu').onclick=()=>{aud();$('mn').textContent='';mode=(mode+1)%3;$('yt').hidden=mode!=1;if(mode==1&&!yt)loadYT();label();syncMus()};
 function sw(){const w=$('sw');w.querySelectorAll('button').forEach(b=>b.remove());BL.forEach(p=>{const b=document.createElement('button');b.style.setProperty('--s',p[1]);b.setAttribute('aria-label',p[0]+' blade');b.setAttribute('aria-pressed',col==p[1]);b.onclick=()=>{col=p[1];sw()};w.appendChild(b)})}
 sw();$('bs').textContent=best;requestAnimationFrame(frame);
 </script></body></html>
